@@ -11,26 +11,26 @@ RUN set -x \
  && pip3 install -U numpy grpcio absl-py py-cpuinfo psutil portpicker six mock requests gast h5py astor termcolor
 
 # split image due to too long compilation time
-RUN pip3 install -U keras-preprocessing keras-applications protobuf tensorboard tensorflow-estimator \
- && pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v42 tensorflow-gpu==1.13.1+nv19.5 \
- && rm -rf /var/lib/apt/lists/*
+RUN pip3 install -U keras-preprocessing keras-applications protobuf tensorboard==1.14.0 tensorflow-estimator==1.14.0 wrapt google-pasta==0.1.6
+RUN pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v42 tensorflow-gpu==1.14.0+nv19.7
+#RUN rm -rf /var/lib/apt/lists/*
 
 # set environment variable
 ENV LD_LIBRARY_PATH /usr/local/cuda-10.0/targets/aarch64-linux/lib:/usr/lib/aarch64-linux-gnu/tegra
 ENV CUDA_PATH /usr/local/cuda-10.0
 
 # create a user
-ARG USER=foo
-ARG UID=1000
-ARG GID=1000
+#ARG USER=foo
+#ARG UID=1000
+#ARG GID=1000
 
-RUN groupadd -g $GID $USER \
- && useradd -u $UID -g $GID -G video $USER \
- && mkdir -p /home/$USER \
- && chown -R foo:foo /home/$USER
+#RUN groupadd -g $GID $USER \
+# && useradd -u $UID -g $GID -G video $USER \
+# && mkdir -p /home/$USER \
+# && chown -R foo:foo /home/$USER
 
-ENV HOME /home/$USER
-USER $USER
-WORKDIR /home/$USER
+#ENV HOME /home/$USER
+#USER $USER
+#WORKDIR /home/$USER
 
 CMD ["/bin/bash"]
